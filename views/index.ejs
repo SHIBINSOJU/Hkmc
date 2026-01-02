@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKMC | Kerala's Lifesteal Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <style>
+        :root {
+            --primary: #ff1a1a; /* Hardcore Red */
+            --dark: #0f0f0f;
+            --card-bg: rgba(30, 30, 30, 0.6);
+            --glass: 10px;
+        }
+
+        body {
+            background-color: #050505;
+            background-image: 
+                radial-gradient(circle at 50% 0%, #3a0000 0%, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-img {
+            width: 180px;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: -webkit-linear-gradient(#fff, #ff4d4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .server-ip {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .server-ip:hover {
+            background: var(--primary);
+            box-shadow: 0 0 30px var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* Features Grid (Cards) */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 50px 10%;
+            margin-top: -100px; /* Overlap effect */
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--glass));
+            -webkit-backdrop-filter: blur(var(--glass));
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Live Status Badge */
+        .status-badge {
+            display: inline-block;
+            background: rgba(0, 255, 0, 0.2);
+            color: #4dff4d;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            border: 1px solid #4dff4d;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <img src="/images/logo.png" alt="HKMC Logo" class="logo-img">
+        
+        <div class="status-badge">
+            ● <%= online ? 'Server Online' : 'Server Offline' %>
+        </div>
+
+        <h1>Hardcore Kerala<br>Minecraft Community</h1>
+        <p style="color: #aaa; margin-bottom: 30px;">The Ultimate Lifesteal SMP Experience</p>
+
+        <div class="server-ip" onclick="navigator.clipboard.writeText('play.hkmc.fun'); alert('IP Copied!');">
+            play.hkmc.fun <span style="font-size:0.8em; opacity:0.7;">(Click to Copy)</span>
+        </div>
+        
+        <p style="margin-top: 15px; font-size: 0.9rem;">
+            Currently Playing: <strong><%= players %> / <%= max %></strong>
+        </p>
+    </div>
+
+    <div class="features">
+        
+        <div class="card">
+            <h3>⚡ 24/7 Uptime</h3>
+            <p>We use high-performance Ryzens nodes hosted in Mumbai. Low ping for Kerala players and zero downtime ensured.</p>
+        </div>
+
+        <div class="card">
+            <h3>🛡️ Active Staff</h3>
+            <p>Our staff team is active round the clock to keep the server fair. No hackers, no abuse, just pure skill-based gameplay.</p>
+        </div>
+
+        <div class="card">
+            <h3>❤️ Lifesteal Mechanics</h3>
+            <p>Kill players to steal their hearts. Lose all hearts and get banned. The stakes have never been higher.</p>
+        </div>
+
+        <div class="card" style="border-color: #ffd700;">
+            <h3 style="color: #ffd700;">👑 Top Killer</h3>
+            <% if(leaderboard.length > 0) { %>
+                <p style="font-size: 1.2rem; font-weight: bold;"><%= leaderboard[0].username %></p>
+                <p>Kills: <%= leaderboard[0].kills %> | Hearts: <%= leaderboard[0].hearts %></p>
+            <% } else { %>
+                <p>No data yet.</p>
+            <% } %>
+        </div>
+
+    </div>
+
+</body>
+</html>
