@@ -57,6 +57,20 @@ app.get('/', async (req, res) => {
         });
     }
 });
+// Route: Store (Coming Soon)
+app.get('/store', (req, res) => {
+    res.render('coming-soon', { pageName: 'store', page: 'store' });
+});
+
+// Route: Vote (Coming Soon)
+app.get('/vote', (req, res) => {
+    res.render('coming-soon', { pageName: 'vote', page: 'vote' });
+});
+
+// Route: Leaderboard (Optional: Point to coming soon if not ready)
+app.get('/leaderboard', (req, res) => {
+    res.render('coming-soon', { pageName: 'leaderboard', page: 'leaderboard' });
+});
 
 // START SERVER
 app.listen(PORT, () => {
