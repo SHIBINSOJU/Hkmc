@@ -5,90 +5,181 @@
             <span>HKMC</span>
         </a>
 
-        <ul class="nav-links">
-            <li><a href="/" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
-            <li><a href="/leaderboard" class="<%= page === 'leaderboard' ? 'active' : '' %>">Stats</a></li>
-            <li><a href="https://store.hkmc.fun" target="_blank" style="color: #ffd700;">Store 💎</a></li>
-            <li><a href="/vote">Vote</a></li>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="/" class="nav-link <%= page === 'home' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/leaderboard" class="nav-link <%= page === 'leaderboard' ? 'active' : '' %>">Stats</a></li>
+            <li><a href="/store" class="nav-link <%= page === 'store' ? 'active' : '' %>" style="color: #ffd700;">Store 💎</a></li>
+            <li><a href="/vote" class="nav-link <%= page === 'vote' ? 'active' : '' %>">Vote</a></li>
+            
+            <li class="mobile-btn">
+                <a href="https://discord.gg/yourinvite" class="discord-btn-mobile">Join Discord</a>
+            </li>
         </ul>
 
-        <a href="https://discord.gg/yourinvite" target="_blank" class="nav-discord">
+        <a href="https://discord.gg/yourinvite" target="_blank" class="discord-btn desktop-btn">
             <i class="fab fa-discord"></i> Join Discord
         </a>
     </div>
 </nav>
 
+<script>
+    // Script to toggle the menu
+    const menu = document.querySelector('#mobile-menu');
+    const navMenu = document.querySelector('.nav-menu');
+
+    menu.addEventListener('click', () => {
+        menu.classList.toggle('is-active');
+        navMenu.classList.toggle('active');
+    });
+</script>
+
 <style>
-    /* Navbar CSS embedded for simplicity, or move to style.css */
+    /* --- NAVBAR CSS --- */
     .navbar {
-        position: fixed;
+        background: rgba(5, 5, 5, 0.95);
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        position: sticky;
         top: 0;
-        width: 100%;
-        background: rgba(10, 10, 10, 0.8);
-        backdrop-filter: blur(15px);
+        z-index: 999;
         border-bottom: 1px solid rgba(255, 0, 0, 0.2);
-        z-index: 1000;
-        padding: 15px 0;
+        backdrop-filter: blur(10px);
     }
 
     .nav-container {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        width: 90%;
+        height: 70px;
+        z-index: 1;
+        width: 100%;
         max-width: 1200px;
         margin: 0 auto;
+        padding: 0 20px;
+        align-items: center;
     }
 
     .nav-logo {
+        color: #fff;
         display: flex;
         align-items: center;
-        gap: 10px;
+        cursor: pointer;
         text-decoration: none;
-        color: white;
-        font-weight: 800;
         font-size: 1.5rem;
+        font-weight: 800;
     }
 
-    .nav-logo img {
-        height: 40px;
-        image-rendering: pixelated;
-    }
+    .nav-logo img { width: 40px; margin-right: 10px; }
 
-    .nav-links {
-        list-style: none;
+    .nav-menu {
         display: flex;
-        gap: 30px;
+        align-items: center;
+        list-style: none;
+        text-align: center;
+        gap: 20px;
     }
 
-    .nav-links a {
-        color: #ccc;
+    .nav-link {
+        color: #fff;
+        display: flex;
+        align-items: center;
         text-decoration: none;
+        padding: 0 1rem;
+        height: 100%;
         font-weight: 500;
         transition: 0.3s;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-        letter-spacing: 1px;
     }
 
-    .nav-links a:hover, .nav-links a.active {
+    .nav-link:hover, .nav-link.active {
         color: #ff1a1a;
-        text-shadow: 0 0 10px rgba(255, 26, 26, 0.6);
     }
 
-    .nav-discord {
+    .discord-btn {
         background: #5865F2;
-        color: white;
         padding: 8px 20px;
-        border-radius: 5px;
+        border-radius: 4px;
+        color: white;
         text-decoration: none;
         font-weight: bold;
-        font-size: 0.9rem;
         transition: 0.3s;
     }
+    .discord-btn:hover { background: #4752c4; }
 
-    .nav-discord:hover {
-        background: #4752c4;
-        transform: translateY(-2px);
+    .mobile-btn { display: none; }
+
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media screen and (max-width: 960px) {
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 90vh; /* Full screen menu */
+            position: absolute;
+            top: 70px; /* Below navbar */
+            left: -100%; /* Hidden by default */
+            opacity: 1;
+            transition: all 0.5s ease;
+            background: #000;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+        }
+
+        .nav-menu.active {
+            left: 0; /* Slide in */
+        }
+
+        .nav-link {
+            text-align: center;
+            padding: 2rem;
+            width: 100%;
+            display: table;
+            font-size: 1.5rem;
+        }
+
+        .desktop-btn { display: none; }
+        
+        .mobile-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 2rem;
+        }
+
+        .discord-btn-mobile {
+            background: #5865F2;
+            padding: 15px 60px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Hamburger Icon Animation */
+        .menu-toggle {
+            display: block;
+            cursor: pointer;
+        }
+
+        .menu-toggle .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            transition: all 0.3s ease-in-out;
+            background: #fff;
+        }
+
+        .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
+        .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
     }
 </style>
