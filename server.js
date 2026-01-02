@@ -6,7 +6,7 @@ const PORT = 3000;
 const Player = require('./models/Player');
 
 // 1. MongoDB Connection (Replace with your actual MongoDB URI)
-mongoose.connect('mongodb://127.0.0.1:27017/hkmc_db', {
+mongoose.connect('mongodb+srv://shibinhussainmk_db_user:4XZujvl0OnCKhdN5@musicbot.3sydv1a.mongodb.net/?retryWrites=true&w=majority&appName=musicBOT', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("✅ MongoDB Connected"))
@@ -37,9 +37,12 @@ app.get('/', async (req, res) => {
         { username: 'Shadow', kills: 98, hearts: 5 }
     ];
 
+    
+    
     try {
         const status = await util.status(SERVER_IP, SERVER_PORT);
         res.render('index', {
+            page: 'home',
             online: true,
             players: status.players.online,
             max: status.players.max,
