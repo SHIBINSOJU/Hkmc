@@ -16,8 +16,8 @@ mongoose.connect('mongodb+srv://shibinhussainmk_db_user:4XZujvl0OnCKhdN5@musicbo
   .catch(err => console.error("❌ MongoDB Error:", err));
 
 // Configuration
-const SERVER_IP = 'play.hkmc.fun'; 
-const SERVER_PORT = 25565; 
+const SERVER_IP = '148.113.5.96'; 
+const SERVER_PORT = 25566; 
 
 // Middleware
 app.set('view engine', 'ejs');
