@@ -1,0 +1,94 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">
+            <img src="/images/logo.png" alt="HKMC">
+            <span>HKMC</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="/" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/leaderboard" class="<%= page === 'leaderboard' ? 'active' : '' %>">Stats</a></li>
+            <li><a href="https://store.hkmc.fun" target="_blank" style="color: #ffd700;">Store 💎</a></li>
+            <li><a href="/vote">Vote</a></li>
+        </ul>
+
+        <a href="https://discord.gg/yourinvite" target="_blank" class="nav-discord">
+            <i class="fab fa-discord"></i> Join Discord
+        </a>
+    </div>
+</nav>
+
+<style>
+    /* Navbar CSS embedded for simplicity, or move to style.css */
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 15px 0;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: white;
+        font-weight: 800;
+        font-size: 1.5rem;
+    }
+
+    .nav-logo img {
+        height: 40px;
+        image-rendering: pixelated;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+    }
+
+    .nav-links a {
+        color: #ccc;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+        color: #ff1a1a;
+        text-shadow: 0 0 10px rgba(255, 26, 26, 0.6);
+    }
+
+    .nav-discord {
+        background: #5865F2;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+
+    .nav-discord:hover {
+        background: #4752c4;
+        transform: translateY(-2px);
+    }
+</style>
