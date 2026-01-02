@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const util = require('minecraft-server-util');
 const app = express();
 const PORT = 3000;
+const Player = require('./models/Player');
 
 // 1. MongoDB Connection (Replace with your actual MongoDB URI)
 mongoose.connect('mongodb://127.0.0.1:27017/hkmc_db', {
