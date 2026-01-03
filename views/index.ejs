@@ -14,7 +14,6 @@
         :root {
             --primary: #ff1a1a;       /* Hardcore Red */
             --primary-dim: #8b0000;   /* Dark Red */
-            --bg: #050505;            /* Deep Black */
             --card-bg: rgba(20, 20, 20, 0.6);
             --glass: 12px;
             --text-main: #ffffff;
@@ -25,11 +24,7 @@
         * { box-sizing: border-box; }
         
         body {
-            background-color: var(--bg);
-            /* Subtle background pattern */
-            background-image: 
-                radial-gradient(circle at 50% 10%, rgba(139, 0, 0, 0.2) 0%, transparent 60%),
-                url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            /* Background is now handled by navbar.ejs for the Red Fog effect */
             color: var(--text-main);
             font-family: 'Outfit', sans-serif;
             margin: 0;
@@ -249,7 +244,7 @@
 
         <div class="ip-wrapper">
             <button class="copy-btn" onclick="copyIP()" id="ipBtn">
-                <span>play.hkmc.fun</span>
+                <span>148.113.5.96:25566</span>
                 <i class="fas fa-copy"></i>
             </button>
             <div class="player-count">
@@ -306,7 +301,8 @@
 
     <script>
         function copyIP() {
-            const ip = "play.hkmc.fun";
+            // UPDATED IP ADDRESS IN SCRIPT
+            const ip = "148.113.5.96:25566";
             navigator.clipboard.writeText(ip).then(() => {
                 const btn = document.getElementById("ipBtn");
                 const originalHTML = btn.innerHTML;
