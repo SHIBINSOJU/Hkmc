@@ -113,6 +113,33 @@ app.get('/reset-stats', async (req, res) => {
     }
 });
 
+// 6. INDIVIDUAL PLAYER PROFILE
+app.get('/player/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+        // Find specific player in DB
+        const player = await Player.findOne({ username: username });
+
+        if (!player) {
+            return res.send("Player not found! (Make sure they have joined the server)");
+        }
+
+        // Calculate Rank (Expensive operation, but cool)
+        // We count how many people have MORE kills than this player
+        const rank = await Player.countDocuments({ kills: { $gt: player.kills } }) + 1;
+
+        res.render('player', { 
+            page: 'profile',
+            player: player,
+            rank: rank
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.redirect('/leaderboard');
+    }
+});
+
 // START SERVER
 app.listen(PORT, () => {
     console.log(`🚀 HKMC Website live at http://localhost:${PORT}`);
