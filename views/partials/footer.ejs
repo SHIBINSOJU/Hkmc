@@ -1,42 +1,95 @@
 <footer>
     <div class="footer-content">
-        <p>&copy; 2026 <strong>HKMC Network</strong>. All Rights Reserved.</p>
-        <p style="font-size: 0.8rem; color: #666;">Not affiliated with Mojang AB.</p>
-        
         <div class="socials">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href="https://instagram.com/your_handle" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com/your_channel" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://discord.gg/yourinvite" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
+
+        <p class="copyright">
+            &copy; 2026 <strong>HKMC Network</strong>. All Rights Reserved.<br>
+            <span style="font-size: 0.8rem; opacity: 0.6;">Not affiliated with Mojang AB.</span>
+        </p>
+
+        <div class="developer-credit">
+            <p>Built with <i class="fas fa-code" style="color: #ff1a1a;"></i> by 
+                <a href="https://shotdevs.live/" target="_blank" class="shotdevs-link">
+                    ShotDevs
+                </a>
+            </p>
         </div>
     </div>
 </footer>
 
 <style>
     footer {
-        background: #000;
+        /* FIX: Made transparent so the Red Background shows through */
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2));
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        
         padding: 40px 0;
         text-align: center;
-        margin-top: 100px;
-        border-top: 1px solid #222;
-    }
-    
-    .footer-content p {
-        color: #888;
-        margin: 5px 0;
+        margin-top: auto; /* Pushes footer to bottom */
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        z-index: 10;
     }
 
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .copyright {
+        color: #888;
+        margin: 20px 0;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    /* --- SOCIALS --- */
     .socials {
-        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     .socials a {
-        color: #fff;
-        font-size: 1.2rem;
-        margin: 0 10px;
+        color: #ccc;
+        font-size: 1.5rem;
+        margin: 0 15px;
         transition: 0.3s;
+        display: inline-block;
     }
 
     .socials a:hover {
         color: #ff1a1a;
+        transform: translateY(-3px);
+        text-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
+    }
+
+    /* --- SHOTDEVS BRANDING --- */
+    .developer-credit {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .shotdevs-link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        transition: 0.3s;
+        position: relative;
+    }
+
+    /* The "Glow" effect for your brand */
+    .shotdevs-link:hover {
+        color: #00e5ff; /* Cyan color often used for 'Dev' branding, or change to Red */
+        text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
     }
 </style>
