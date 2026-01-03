@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const util = require('minecraft-server-util');
 const path = require('path');
-const axios = require('axios'); // Required for "Online Now" fix
 
 // IMPORT THE MODEL
 const Player = require('./models/Player'); 
@@ -27,21 +26,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 1. HOME PAGE
 app.get('/', async (req, res) => {
-    // 1. Fetch Real Top Killer (Live Update)
-    // This grabs the player with the HIGHEST kills from MongoDB
+    // Live Top Killer Update
     let leaderboard = await Player.find().sort({ kills: -1 }).limit(1);
 
-    // Fallback: If database is completely empty (new server)
     if (leaderboard.length === 0) {
-        leaderboard = [
-            { username: 'No One Yet', kills: 0, hearts: 10 }
-        ];
+        leaderboard = [{ username: 'No One Yet', kills: 0, hearts: 10 }];
     }
 
     try {
-        // 2. Fetch Server Status (With 5 Second Timeout to fix flickering)
+        // Fetch Status with 5s Timeout (Fixes "Offline" flickering)
         const status = await util.status(SERVER_IP, SERVER_PORT, { 
-            timeout: 5000, // Wait 5 seconds before saying offline
+            timeout: 5000, 
             enableSRV: true 
         });
 
@@ -51,11 +46,9 @@ app.get('/', async (req, res) => {
             players: status.players.online,
             max: status.players.max,
             version: status.version.name,
-            leaderboard: leaderboard // This sends .Lynx1937 to the page
+            leaderboard: leaderboard
         });
-
     } catch (error) {
-        // If server is truly offline (or takes > 5 seconds)
         res.render('index', {
             page: 'home',
             online: false,
@@ -67,28 +60,39 @@ app.get('/', async (req, res) => {
     }
 });
 
-// 2. LEADERBOARD + LIVE PLAYERS PAGE
+// 2. LEADERBOARD + LIVE PLAYERS PAGE (DIRECT QUERY FIX)
 app.get('/leaderboard', async (req, res) => {
     try {
-        // A. Fetch All Stats from Database (Sorted by kills)
+        // A. DB STATS (Red Table)
         const dbPlayers = await Player.find().sort({ kills: -1 }).limit(50);
 
-        // B. Fetch LIVE Status from Public API (Fixes "Online Now 0" Bug)
+        // B. LIVE PLAYERS (Green Box) - DIRECT QUERY METHOD
         let onlineList = []; 
         try {
-            const response = await axios.get(`https://api.mcsrvstat.us/3/${SERVER_IP}:${SERVER_PORT}`);
+            // "queryFull" bypasses the simple ping and asks for the real list
+            const status = await util.queryFull(SERVER_IP, SERVER_PORT);
             
-            if (response.data.online && response.data.players && response.data.players.list) {
-                onlineList = response.data.players.list; 
+            if (status.players.list && status.players.list.length > 0) {
+                // The query returns a simple list of names ['Rizx', 'Shadow']
+                // We convert it to objects [{name:'Rizx'}] so your EJS file understands it
+                onlineList = status.players.list.map(name => ({ name: name }));
             }
         } catch (e) {
-            console.log("Could not fetch live players from API:", e.message);
+            console.log("Query failed (Is enable-query=true?):", e.message);
+            
+            // Fallback: Try simple status if Query fails
+            try {
+                const simple = await util.status(SERVER_IP, SERVER_PORT);
+                if (simple.players.sample) {
+                    onlineList = simple.players.sample;
+                }
+            } catch (err) {}
         }
 
         res.render('leaderboard', { 
             page: 'leaderboard',
-            players: dbPlayers,     // Database History (Red Table)
-            livePlayers: onlineList // Real-time Online (Green Heads)
+            players: dbPlayers,     // Red Table
+            livePlayers: onlineList // Green Box
         });
 
     } catch (err) {
@@ -120,7 +124,7 @@ app.get('/donate', (req, res) => {
     });
 });
 
-// --- HELPER: Reset Database Route (Use carefully!) ---
+// --- HELPER: Reset Database Route ---
 app.get('/reset-stats', async (req, res) => {
     try {
         await Player.deleteMany({}); 
