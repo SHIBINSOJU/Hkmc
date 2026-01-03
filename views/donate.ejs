@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support HKMC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        :root { --primary: #ff1a1a; --bg: #050505; --card: rgba(20,20,20,0.8); }
+
+        body {
+            background-color: var(--bg);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .donate-container {
+            max-width: 900px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            background: -webkit-linear-gradient(#fff, #ff4d4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle { color: #aaa; font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; }
+
+        /* --- DONATION BOXES --- */
+        .donate-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            text-align: left;
+        }
+
+        /* LEFT: QR & UPI */
+        .payment-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .qr-placeholder img { width: 100%; height: 100%; object-fit: contain; }
+
+        .upi-box {
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px dashed #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .upi-box:active { background: rgba(0,255,0,0.1); border-color: #00ff00; }
+
+        /* RIGHT: WHY DONATE */
+        .info-card {
+            padding: 20px;
+        }
+        
+        .info-card h3 { color: var(--primary); font-size: 1.5rem; margin-top: 0; }
+        .info-card p { color: #ccc; line-height: 1.6; margin-bottom: 20px; }
+
+        .perks-list { list-style: none; padding: 0; }
+        .perks-list li { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+        .perks-list li i { color: #00ff00; }
+
+        /* RECENT DONORS */
+        .donors-section {
+            margin-top: 50px;
+            background: linear-gradient(90deg, transparent, rgba(255, 26, 26, 0.1), transparent);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .donor-tag {
+            display: inline-block;
+            background: #222;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            border: 1px solid #333;
+            font-size: 0.9rem;
+        }
+        .donor-tag span { color: #ffaa00; font-weight: bold; }
+
+        /* Mobile Fix */
+        @media (max-width: 768px) {
+            .donate-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('partials/navbar', { page: 'donate' }) %>
+
+    <div class="donate-container">
+        <h1>Keep HKMC Alive</h1>
+        <p class="subtitle">
+            HKMC is a community-funded project. We don't have big investors. 
+            Every rupee you contribute goes directly into Server Hosting, DDoS Protection, and Premium Plugins.
+        </p>
+
+        <div class="donate-grid">
+            
+            <div class="payment-card">
+                <div class="qr-placeholder">
+                    <img src="/images/qr.png" alt="UPI QR Code" onerror="this.src='https://via.placeholder.com/200?text=QR+Code';">
+                </div>
+                
+                <p style="color: #888; font-size: 0.9rem;">Scan to pay via GPay / Paytm / PhonePe</p>
+
+                <div class="upi-box" onclick="copyUPI()">
+                    <i class="fas fa-wallet" style="color: #ff1a1a;"></i>
+                    <span id="upi-id">shibin@oksbi</span> <i class="fas fa-copy" style="opacity: 0.5;"></i>
+                </div>
+                <p id="copy-msg" style="font-size: 0.8rem; color: #00ff00; height: 15px; margin-top: 5px;"></p>
+            </div>
+
+            <div class="info-card">
+                <h3>Why Donate?</h3>
+                <p>Running a high-performance Lifesteal server is expensive. Your support helps us upgrade hardware and keep the server lag-free.</p>
+                
+                <h3>Donor Perks</h3>
+                <ul class="perks-list">
+                    <li><i class="fas fa-check-circle"></i> Special <strong>[Supporter]</strong> Role in Discord</li>
+                    <li><i class="fas fa-check-circle"></i> Name in the "Hall of Fame" below</li>
+                    <li><i class="fas fa-check-circle"></i> Our eternal gratitude ❤️</li>
+                </ul>
+
+                <a href="https://discord.gg/yourinvite" target="_blank" 
+                   style="display: inline-block; background: #5865F2; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; font-weight: bold;">
+                   <i class="fab fa-discord"></i> Send Proof on Discord
+                </a>
+            </div>
+
+        </div>
+
+        <div class="donors-section">
+            <h3 style="margin-top: 0; color: #fff;">Recent Supporters 🏆</h3>
+            <% if(donors.length > 0) { %>
+                <% donors.forEach(donor => { %>
+                    <div class="donor-tag">
+                        <%= donor.name %> <span><%= donor.amount %></span>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p style="color: #666;">Be the first to donate!</p>
+            <% } %>
+        </div>
+
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        function copyUPI() {
+            const upi = document.getElementById('upi-id').innerText;
+            navigator.clipboard.writeText(upi);
+            document.getElementById('copy-msg').innerText = "UPI ID Copied!";
+            setTimeout(() => document.getElementById('copy-msg').innerText = "", 2000);
+        }
+    </script>
+
+</body>
+</html>
