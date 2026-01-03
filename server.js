@@ -132,6 +132,16 @@ app.get('/seed-db', async (req, res) => {
     res.send("✅ Database seeded with 20 fake players! Go to /leaderboard");
 });
 
+// --- TEMPORARY: Reset Database Route ---
+app.get('/reset-stats', async (req, res) => {
+    try {
+        await Player.deleteMany({}); // This DELETES everyone from the database
+        res.send("✅ Database Wiped! All fake players are gone. You can now restart your server to get real stats.");
+    } catch (e) {
+        res.send("Error wiping DB: " + e.message);
+    }
+});
+
 // START SERVER
 app.listen(PORT, () => {
     console.log(`🚀 HKMC Website live at http://localhost:${PORT}`);
