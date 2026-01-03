@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= player.username %> - Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; margin: 0; color: white; background: #111; }
+        .container { max-width: 900px; margin: 120px auto; padding: 20px; text-align: center; }
+        
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .skin-render {
+            height: 350px;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 140px;
+        }
+
+        .stat-label { color: #888; font-size: 0.9rem; text-transform: uppercase; }
+        .stat-value { font-size: 1.8rem; font-weight: 800; margin-top: 5px; }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            color: #888;
+            text-decoration: none;
+            border: 1px solid #333;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: white; color: black; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar', { page: 'profile' }) %>
+
+    <div class="container">
+        <div class="profile-card">
+            <div>
+                <img src="https://render.skinmc.net/3d.php?user=<%= player.username %>&hr=0&aa=true&headOnly=false&ratio=12" class="skin-render">
+                <h1 style="margin: 0; font-size: 3rem;"><%= player.username %></h1>
+                <div style="color: #ffd700; font-size: 1.2rem; margin-top: 10px;">Rank #<%= rank %></div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">⚔️ Kills</div>
+                    <div class="stat-value" style="color: #ff5555;"><%= player.kills %></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">💀 Deaths</div>
+                    <div class="stat-value"><%= player.deaths %></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">🎯 K/D Ratio</div>
+                    <div class="stat-value" style="color: #55aaff;">
+                        <%= (player.kills / (player.deaths > 0 ? player.deaths : 1)).toFixed(2) %>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">❤️ Hearts</div>
+                    <div class="stat-value" style="color: #ff5555;"><%= player.hearts %></div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/leaderboard" class="back-btn">← Back to Leaderboard</a>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
