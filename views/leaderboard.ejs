@@ -8,21 +8,22 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <style>
-        /* --- COPY YOUR GLOBAL VARS HERE OR LINK CSS --- */
-        :root { --primary: #ff1a1a; --bg: #050505; --glass: 12px; }
+        /* --- GLOBAL VARIABLES --- */
+        :root { --primary: #ff1a1a; --glass: 12px; }
         
+        /* CLEAN BODY: No background color here (Navbar handles it) */
         body {
-            background-color: var(--bg);
-            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
-            color: white;
             font-family: 'Outfit', sans-serif;
             margin: 0;
+            /* Layout fixes are inherited from Navbar now */
         }
 
         .container {
             max-width: 1100px;
-            margin: 100px auto 50px; /* Top margin for navbar */
+            /* Added extra top margin because Navbar is floating now */
+            margin: 120px auto 50px; 
             padding: 20px;
+            flex: 1; /* Pushes footer to bottom */
         }
 
         /* --- HEADINGS --- */
