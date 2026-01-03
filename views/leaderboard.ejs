@@ -40,6 +40,77 @@
             margin: 0;
         }
 
+        /* --- LIVE PLAYERS STYLES --- */
+        .live-section {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 0, 0.1); /* Green tint for "Live" */
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .live-section h3 {
+            color: #00ff00; /* Bright Green */
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* The glowing green dot */
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff00;
+            animation: pulse 1.5s infinite;
+        }
+
+        .online-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* The individual player tag */
+        .player-chip {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 15px 8px 8px; /* Extra padding on right for text */
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.2s;
+        }
+
+        .player-chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .player-chip img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .player-chip span {
+            font-weight: bold;
+            color: #ddd;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
         /* --- PODIUM (TOP 3) --- */
         .podium {
             display: flex;
@@ -131,78 +202,6 @@
             th, td { padding: 10px; font-size: 0.9rem; }
             .hide-mobile { display: none; } /* Hide Balance/Deaths on small screens */
         }
-
-    /* --- LIVE PLAYERS STYLES --- */
-    .live-section {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(0, 255, 0, 0.1); /* Green tint for "Live" */
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 40px;
-        text-align: center;
-    }
-
-    .live-section h3 {
-        color: #00ff00; /* Bright Green */
-        margin-top: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    /* The glowing green dot */
-    .pulse-dot {
-        width: 10px;
-        height: 10px;
-        background-color: #00ff00;
-        border-radius: 50%;
-        box-shadow: 0 0 10px #00ff00;
-        animation: pulse 1.5s infinite;
-    }
-
-    .online-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    /* The individual player tag */
-    .player-chip {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 8px 15px 8px 8px; /* Extra padding on right for text */
-        border-radius: 30px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: 0.2s;
-    }
-
-    .player-chip:hover {
-        background: rgba(255, 255, 255, 0.15);
-        transform: translateY(-2px);
-    }
-
-    .player-chip img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-    }
-
-    .player-chip span {
-        font-weight: bold;
-        color: #ddd;
-    }
-
-    @keyframes pulse {
-        0% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.2); }
-        100% { opacity: 1; transform: scale(1); }
-    }
-
     </style>
 </head>
 <body>
@@ -215,27 +214,28 @@
             <h1>Top Killers</h1>
             <p style="color: #888;">The deadliest players in Kerala</p>
         </div>
-    <div class="live-section">
-        <h3>
-            <span class="pulse-dot"></span> 
-            Online Now (<%= livePlayers.length %>)
-        </h3>
 
-        <% if (livePlayers.length > 0) { %>
-            <div class="online-grid">
-                <% livePlayers.forEach(p => { %>
-                    <div class="player-chip">
-                        <img src="https://mc-heads.net/avatar/<%= p.name %>" alt="<%= p.name %>">
-                        <span><%= p.name %></span>
-                    </div>
-                <% }) %>
-            </div>
-        <% } else { %>
-            <p style="color: #666; font-style: italic;">No players online... Time to join!</p>
-        <% } %>
-    </div>
+        <div class="live-section">
+            <h3>
+                <span class="pulse-dot"></span> 
+                Online Now (<%= livePlayers.length %>)
+            </h3>
 
-    <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0;">
+            <% if (livePlayers.length > 0) { %>
+                <div class="online-grid">
+                    <% livePlayers.forEach(p => { %>
+                        <div class="player-chip">
+                            <img src="https://mc-heads.net/avatar/<%= p.name %>" alt="<%= p.name %>">
+                            <span><%= p.name %></span>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p style="color: #666; font-style: italic;">No players online... Time to join!</p>
+            <% } %>
+        </div>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0;">
 
         <div class="podium">
             <% if (players.length > 1) { %>
@@ -278,18 +278,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% players.forEach((player, index) => { %>
+                    <% if (players.length === 0) { %>
                         <tr>
-                            <td class="rank-num">#<%= index + 1 %></td>
-                            <td style="display: flex; align-items: center; gap: 10px;">
-                                <img src="https://mc-heads.net/avatar/<%= player.username %>" width="30" style="border-radius: 5px;">
-                                <strong><%= player.username %></strong>
-                            </td>
-                            <td style="color: #ff5555; font-weight: bold;"><%= player.kills %></td>
-                            <td class="hide-mobile" style="color: #888;"><%= player.deaths %></td>
-                            <td><i class="fas fa-heart heart-icon"></i> <%= player.hearts %></td>
+                            <td colspan="5" style="text-align: center; color: #888;">No data yet. Join the server to be the first!</td>
                         </tr>
-                    <% }) %>
+                    <% } else { %>
+                        <% players.forEach((player, index) => { %>
+                            <tr>
+                                <td class="rank-num">#<%= index + 1 %></td>
+                                <td style="display: flex; align-items: center; gap: 10px;">
+                                    <img src="https://mc-heads.net/avatar/<%= player.username %>" width="30" style="border-radius: 5px;">
+                                    <strong><%= player.username %></strong>
+                                </td>
+                                <td style="color: #ff5555; font-weight: bold;"><%= player.kills %></td>
+                                <td class="hide-mobile" style="color: #888;"><%= player.deaths %></td>
+                                <td><i class="fas fa-heart heart-icon"></i> <%= player.hearts %></td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
                 </tbody>
             </table>
         </div>
