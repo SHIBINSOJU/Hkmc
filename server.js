@@ -100,6 +100,21 @@ app.get('/seed-db', async (req, res) => {
     res.send("✅ Database seeded with 20 fake players! Go to /leaderboard");
 });
 
+// Route: Donate / Support Us
+app.get('/donate', (req, res) => {
+    // EDIT THIS LIST:
+    const recentDonors = [
+        // You can leave this empty like this: [] 
+        // Or add real people:
+        { name: 'Zilsila', amount: '₹500' }, 
+        { name: 'Shibinsoju', amount: '₹100' }
+    ];
+
+    res.render('donate', { 
+        page: 'donate',
+        donors: recentDonors
+    });
+});
 
 // START SERVER
 app.listen(PORT, () => {
