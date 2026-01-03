@@ -240,4 +240,11 @@ body::after {
 }
 
 
+    
+    /* ADD THESE 3 LINES BELOW TO FIX THE FOOTER: */
+    min-height: 100vh;       /* 1. Forces page to be at least as tall as the screen */
+    display: flex;           /* 2. Allows us to push content around */
+    flex-direction: column;  /* 3. Stacks Navbar -> Content -> Footer vertically */
+}
+
 </style>
