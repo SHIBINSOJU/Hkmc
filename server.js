@@ -11,7 +11,9 @@ const app = express();
 const PORT = 3000;
 
 // 1. MongoDB Connection
-mongoose.connect('mongodb+srv://shibinhussainmk_db_user:4XZujvl0OnCKhdN5@musicbot.3sydv1a.mongodb.net/?retryWrites=true&w=majority&appName=musicBOT')
+  // CORRECT (Add 'musicBOT' after the slash):
+mongoose.connect('mongodb+srv://shibinhussainmk_db_user:4XZujvl0OnCKhdN5@musicbot.3sydv1a.mongodb.net/musicBOT?retryWrites=true&w=majority&appName=musicBOT')
+  
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.error("❌ MongoDB Error:", err));
 
