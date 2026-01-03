@@ -3,14 +3,13 @@ const mongoose = require('mongoose');
 const util = require('minecraft-server-util');
 const path = require('path');
 
-// IMPORT THE MODEL (This replaces the manual schema definition)
+// IMPORT THE MODEL
 const Player = require('./models/Player'); 
 
 const app = express();
 const PORT = 3000;
 
 // 1. MongoDB Connection
-// Make sure you have MongoDB installed in Termux (pkg install mongodb)
 mongoose.connect('mongodb+srv://shibinhussainmk_db_user:4XZujvl0OnCKhdN5@musicbot.3sydv1a.mongodb.net/?retryWrites=true&w=majority&appName=musicBOT')
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.error("❌ MongoDB Error:", err));
@@ -24,14 +23,15 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ROUTES
+
+// 1. HOME PAGE
 app.get('/', async (req, res) => {
-    // 1. Try to fetch real top killer from Database
-    // (If DB is empty, it uses the fallback list below)
+    // Try to fetch real top killer from Database
     let leaderboard = await Player.find().sort({ kills: -1 }).limit(1);
 
     if (leaderboard.length === 0) {
         leaderboard = [
-            { username: 'Rizx', kills: 154, hearts: 20 }, // Fallback/Fake data for now
+            { username: 'Rizx', kills: 154, hearts: 20 }, // Fallback/Fake data
         ];
     }
 
@@ -57,30 +57,58 @@ app.get('/', async (req, res) => {
         });
     }
 });
-// Route: Store (Coming Soon)
+
+// 2. STORE PAGE (Coming Soon)
 app.get('/store', (req, res) => {
     res.render('coming-soon', { pageName: 'store', page: 'store' });
 });
 
-// Route: Vote (Coming Soon)
+// 3. VOTE PAGE (Coming Soon)
 app.get('/vote', (req, res) => {
     res.render('coming-soon', { pageName: 'vote', page: 'vote' });
 });
 
-// Route: Leaderboard
+// 4. LEADERBOARD + LIVE PLAYERS PAGE
 app.get('/leaderboard', async (req, res) => {
     try {
-        // Fetch all players, sort by Kills (highest first), limit to top 50
-        const players = await Player.find().sort({ kills: -1 }).limit(50);
-        
+        // A. Fetch Top Killers from Database (Sorted by kills)
+        const dbPlayers = await Player.find().sort({ kills: -1 }).limit(50);
+
+        // B. Fetch LIVE Status from Minecraft Server (Who is online right now?)
+        let onlineList = []; 
+        try {
+            const status = await util.status(SERVER_IP, SERVER_PORT);
+            // 'sample' contains the list of player names sent by the server
+            if (status.players.sample) {
+                onlineList = status.players.sample; 
+            }
+        } catch (e) {
+            console.log("Could not fetch live players:", e.message);
+        }
+
         res.render('leaderboard', { 
             page: 'leaderboard',
-            players: players
+            players: dbPlayers,     // Database History (Table)
+            livePlayers: onlineList // Real-time Online (Green Heads)
         });
+
     } catch (err) {
         console.error(err);
         res.send("Error loading leaderboard");
     }
+});
+
+// 5. DONATE PAGE
+app.get('/donate', (req, res) => {
+    const recentDonors = [
+        { name: 'Zilsila', amount: '₹500' }, 
+        { name: 'Shibinsoju', amount: '₹100' }
+    ];
+
+    res.render('donate', { 
+        page: 'donate',
+        donors: recentDonors
+    });
 });
 
 // --- HELPER: Run this ONCE to generate fake data for testing ---
@@ -98,22 +126,6 @@ app.get('/seed-db', async (req, res) => {
         });
     }
     res.send("✅ Database seeded with 20 fake players! Go to /leaderboard");
-});
-
-// Route: Donate / Support Us
-app.get('/donate', (req, res) => {
-    // EDIT THIS LIST:
-    const recentDonors = [
-        // You can leave this empty like this: [] 
-        // Or add real people:
-        { name: 'Zilsila', amount: '₹500' }, 
-        { name: 'Shibinsoju', amount: '₹100' }
-    ];
-
-    res.render('donate', { 
-        page: 'donate',
-        donors: recentDonors
-    });
 });
 
 // START SERVER
