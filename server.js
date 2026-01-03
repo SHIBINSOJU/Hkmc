@@ -67,10 +67,39 @@ app.get('/vote', (req, res) => {
     res.render('coming-soon', { pageName: 'vote', page: 'vote' });
 });
 
-// Route: Leaderboard (Optional: Point to coming soon if not ready)
-app.get('/leaderboard', (req, res) => {
-    res.render('coming-soon', { pageName: 'leaderboard', page: 'leaderboard' });
+// Route: Leaderboard
+app.get('/leaderboard', async (req, res) => {
+    try {
+        // Fetch all players, sort by Kills (highest first), limit to top 50
+        const players = await Player.find().sort({ kills: -1 }).limit(50);
+        
+        res.render('leaderboard', { 
+            page: 'leaderboard',
+            players: players
+        });
+    } catch (err) {
+        console.error(err);
+        res.send("Error loading leaderboard");
+    }
 });
+
+// --- HELPER: Run this ONCE to generate fake data for testing ---
+app.get('/seed-db', async (req, res) => {
+    await Player.deleteMany({}); // Clear old data
+    const names = ['Rizx', 'Viper', 'Shadow', 'Ghost', 'Titan', 'Neon', 'Ace', 'Luffy', 'Zoro', 'Sanji'];
+    
+    for(let i=0; i<20; i++) {
+        await Player.create({
+            username: names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100),
+            kills: Math.floor(Math.random() * 200),
+            deaths: Math.floor(Math.random() * 50),
+            hearts: Math.floor(Math.random() * 20) + 1,
+            balance: Math.floor(Math.random() * 100000)
+        });
+    }
+    res.send("✅ Database seeded with 20 fake players! Go to /leaderboard");
+});
+
 
 // START SERVER
 app.listen(PORT, () => {
