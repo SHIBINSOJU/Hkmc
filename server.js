@@ -6,7 +6,8 @@ const path = require('path');
 const Player = require('./models/Player'); 
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 
 // 1. MongoDB Connection
 // Note: We don't need 'minecraft-server-util' or 'axios' anymore!
