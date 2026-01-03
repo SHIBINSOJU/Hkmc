@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const util = require('minecraft-server-util');
 const path = require('path');
+const axios = require('axios'); // NEW: Required for the "Online Now" fix
 
 // IMPORT THE MODEL
 const Player = require('./models/Player'); 
@@ -68,27 +69,30 @@ app.get('/vote', (req, res) => {
     res.render('coming-soon', { pageName: 'vote', page: 'vote' });
 });
 
-// 4. LEADERBOARD + LIVE PLAYERS PAGE
+// 4. LEADERBOARD + LIVE PLAYERS PAGE (UPDATED FIX)
 app.get('/leaderboard', async (req, res) => {
     try {
         // A. Fetch Top Killers from Database (Sorted by kills)
+        // This comes from your PLUGIN
         const dbPlayers = await Player.find().sort({ kills: -1 }).limit(50);
 
-        // B. Fetch LIVE Status from Minecraft Server (Who is online right now?)
+        // B. Fetch LIVE Status from Public API (Who is online right now?)
+        // This uses Axios to bypass the server hiding player names
         let onlineList = []; 
         try {
-            const status = await util.status(SERVER_IP, SERVER_PORT);
-            // 'sample' contains the list of player names sent by the server
-            if (status.players.sample) {
-                onlineList = status.players.sample; 
+            const response = await axios.get(`https://api.mcsrvstat.us/3/${SERVER_IP}:${SERVER_PORT}`);
+            
+            // Check if the API sent us a list of players
+            if (response.data.online && response.data.players && response.data.players.list) {
+                onlineList = response.data.players.list; 
             }
         } catch (e) {
-            console.log("Could not fetch live players:", e.message);
+            console.log("Could not fetch live players from API:", e.message);
         }
 
         res.render('leaderboard', { 
             page: 'leaderboard',
-            players: dbPlayers,     // Database History (Table)
+            players: dbPlayers,     // Database History (Red Table)
             livePlayers: onlineList // Real-time Online (Green Heads)
         });
 
