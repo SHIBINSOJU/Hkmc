@@ -2,62 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><%= player.username %> - Profile</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
-        body { font-family: 'Outfit', sans-serif; margin: 0; color: white; background: #111; }
-        .container { max-width: 900px; margin: 120px auto; padding: 20px; text-align: center; }
+        /* --- GLOBAL & ZOOM FIXES --- */
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            margin: 0; 
+            color: white; 
+            background: #0a0a0a; 
+            touch-action: manipulation; /* Stop double-tap zoom */
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: 120px auto; 
+            padding: 20px; 
+            text-align: center; 
+        }
         
+        /* --- GLASS CARD --- */
         .profile-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 40px;
+            padding: 50px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
             gap: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- LEFT: 3D CHARACTER --- */
+        .character-section {
+            text-align: center;
         }
 
         .skin-render {
-            height: 350px;
+            height: 350px; /* Desktop Size */
             filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
             animation: float 3s ease-in-out infinite;
         }
 
+        .player-name {
+            margin: 0; 
+            font-size: 3rem; 
+            text-transform: uppercase;
+            background: -webkit-linear-gradient(#fff, #ff4d4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .rank-badge {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* --- RIGHT: STATS GRID --- */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             text-align: left;
+            min-width: 300px;
         }
 
         .stat-box {
             background: rgba(0, 0, 0, 0.3);
             padding: 20px;
-            border-radius: 10px;
-            min-width: 140px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.2s;
         }
+        .stat-box:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); }
 
-        .stat-label { color: #888; font-size: 0.9rem; text-transform: uppercase; }
+        .stat-label { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .stat-value { font-size: 1.8rem; font-weight: 800; margin-top: 5px; }
 
         .back-btn {
             display: inline-block;
-            margin-top: 30px;
+            margin-top: 40px;
             color: #888;
             text-decoration: none;
             border: 1px solid #333;
-            padding: 10px 20px;
+            padding: 12px 30px;
             border-radius: 30px;
             transition: 0.3s;
+            font-weight: 500;
         }
-        .back-btn:hover { background: white; color: black; }
+        .back-btn:hover { background: white; color: black; border-color: white; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* --- MOBILE OPTIMIZATION (PEAK UI) --- */
+        @media (max-width: 768px) {
+            .container { margin-top: 100px; padding: 15px; }
+            
+            .profile-card {
+                flex-direction: column; /* Stack vertically */
+                gap: 30px;
+                padding: 30px 20px;
+            }
+
+            .skin-render {
+                height: 250px; /* Smaller character for phone */
+            }
+
+            .player-name { font-size: 2.2rem; }
+
+            .stats-grid {
+                width: 100%; /* Full width */
+                min-width: unset;
+                grid-template-columns: 1fr 1fr; /* Keep 2 columns */
+                gap: 10px;
+            }
+
+            .stat-box { padding: 15px; }
+            .stat-value { font-size: 1.4rem; }
+        }
     </style>
 </head>
 <body>
@@ -65,10 +137,11 @@
 
     <div class="container">
         <div class="profile-card">
-            <div>
+            
+            <div class="character-section">
                 <img src="https://render.skinmc.net/3d.php?user=<%= player.username %>&hr=0&aa=true&headOnly=false&ratio=12" class="skin-render">
-                <h1 style="margin: 0; font-size: 3rem;"><%= player.username %></h1>
-                <div style="color: #ffd700; font-size: 1.2rem; margin-top: 10px;">Rank #<%= rank %></div>
+                <h1 class="player-name"><%= player.username %></h1>
+                <div class="rank-badge">Rank #<%= rank %></div>
             </div>
 
             <div class="stats-grid">
@@ -91,6 +164,7 @@
                     <div class="stat-value" style="color: #ff5555;"><%= player.hearts %></div>
                 </div>
             </div>
+
         </div>
 
         <a href="/leaderboard" class="back-btn">← Back to Leaderboard</a>
@@ -99,3 +173,4 @@
     <%- include('partials/footer') %>
 </body>
 </html>
+
