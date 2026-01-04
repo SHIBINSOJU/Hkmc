@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Stats - HKMC</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -14,8 +14,16 @@
         body {
             font-family: 'Outfit', sans-serif;
             margin: 0;
-            background-color: #0a0a0a; /* Dark background just in case */
+            background-color: #0a0a0a;
             color: white;
+            /* ZOOM FIX 2: Disable double-tap zoom on the whole page */
+            touch-action: manipulation;
+        }
+
+        /* ZOOM FIX 3: Stop browser zooming when clicking Search Bar */
+        input, select, textarea {
+            font-size: 16px !important; /* Must be 16px+ to stop iOS zoom */
+            touch-action: manipulation;
         }
 
         .container {
@@ -205,7 +213,8 @@
                         <th>Player</th>
                         <th>Kills</th>
                         <th class="hide-mobile">Deaths</th>
-                        <th>K/D</th> <th>Hearts</th>
+                        <th>K/D</th> 
+                        <th>Hearts</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -248,7 +257,6 @@
             let rows = document.querySelectorAll('#statsTable tbody tr');
 
             rows.forEach(row => {
-                // The 2nd column (index 1) contains the Player Name
                 let nameCell = row.cells[1]; 
                 if (nameCell) {
                     let text = nameCell.textContent || nameCell.innerText;
@@ -264,3 +272,4 @@
 
 </body>
 </html>
+
