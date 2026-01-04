@@ -1,0 +1,28 @@
+{
+  "name": "hkmc",
+  "version": "1.0.0",
+  "description": "The official leaderboard and statistics dashboard for the **HKMC Minecraft Server**. This website connects directly to the server's MongoDB database to display real-time player stats, live online status, and player profiles.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SHIBINSOJU/Hkmc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SHIBINSOJU/Hkmc/issues"
+  },
+  "homepage": "https://github.com/SHIBINSOJU/Hkmc#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.1"
+  }
+}
