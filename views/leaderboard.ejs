@@ -16,13 +16,12 @@
             margin: 0;
             background-color: #0a0a0a;
             color: white;
-            /* ZOOM FIX 2: Disable double-tap zoom on the whole page */
-            touch-action: manipulation;
+            touch-action: manipulation; /* Disables double-tap zoom */
         }
 
-        /* ZOOM FIX 3: Stop browser zooming when clicking Search Bar */
+        /* ZOOM FIX: Input font size 16px+ prevents iOS zoom */
         input, select, textarea {
-            font-size: 16px !important; /* Must be 16px+ to stop iOS zoom */
+            font-size: 16px !important; 
             touch-action: manipulation;
         }
 
@@ -47,12 +46,20 @@
             margin: 0;
         }
 
-        /* --- SEARCH BAR --- */
+        /* --- STICKY SEARCH BAR (Mobile Upgrade) --- */
         .search-container {
+            position: sticky;
+            top: 80px; /* Sticks below the navbar */
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.85); /* Semi-transparent background */
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
             margin-bottom: 20px;
             display: flex;
             justify-content: flex-end;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
         .search-input {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -61,7 +68,7 @@
             color: white;
             font-family: 'Outfit', sans-serif;
             width: 100%;
-            max-width: 300px;
+            max-width: 100%; /* Full width on mobile */
             outline: none;
             transition: 0.3s;
         }
@@ -117,10 +124,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: 0.2s;
         }
-        .player-chip:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
         .player-chip img { width: 30px; height: 30px; border-radius: 50%; }
         .player-chip span { font-weight: bold; color: #ddd; }
 
@@ -130,12 +133,12 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* --- TABLE --- */
+        /* --- TABLE STYLES --- */
         .table-container {
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            overflow: hidden;
+            overflow: hidden; /* Important for border radius */
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -147,7 +150,6 @@
         .rank-num { font-weight: bold; color: #888; }
         .heart-icon { color: #ff1a1a; margin-right: 5px; }
         
-        /* Player Link Style */
         a.player-link {
             text-decoration: none;
             color: white;
@@ -156,15 +158,69 @@
             gap: 10px;
             transition: 0.2s;
         }
-        a.player-link:hover {
-            color: #ff5555;
-            transform: translateX(5px);
-        }
+        a.player-link:hover { color: #ff5555; transform: translateX(5px); }
 
-        /* Mobile Fix */
+        /* --- PEAK MOBILE UI (The Magic Part) --- */
         @media (max-width: 768px) {
-            th, td { padding: 10px; font-size: 0.9rem; }
-            .hide-mobile { display: none; }
+            /* 1. Hide the Table Headers */
+            thead { display: none; }
+
+            /* 2. Turn Rows into Cards */
+            tbody tr {
+                display: flex;
+                flex-wrap: wrap;
+                background: rgba(255, 255, 255, 0.05);
+                margin-bottom: 15px;
+                border-radius: 15px;
+                padding: 15px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                position: relative;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            }
+
+            /* 3. Rank Number (Top Right Corner) */
+            td.rank-num {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-size: 1.5rem;
+                opacity: 0.2;
+                border: none;
+                padding: 0;
+            }
+
+            /* 4. Player Name & Avatar (Full Width Header) */
+            td:nth-child(2) {
+                width: 100%;
+                padding: 0 0 15px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                margin-bottom: 10px;
+                font-size: 1.2rem;
+            }
+
+            /* 5. Stats Grid (Kills, K/D, Hearts) */
+            td {
+                border: none;
+                padding: 5px 0;
+                font-size: 0.95rem;
+                flex: 1; /* Space them evenly */
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #ddd;
+            }
+
+            /* Add Icons/Labels above numbers using CSS */
+            td:nth-child(3)::before { content: "⚔️ Kills"; font-size: 0.7rem; color: #888; margin-bottom: 2px; }
+            td:nth-child(5)::before { content: "🎯 K/D"; font-size: 0.7rem; color: #888; margin-bottom: 2px; }
+            td:nth-child(6)::before { content: "❤️ Health"; font-size: 0.7rem; color: #888; margin-bottom: 2px; }
+
+            /* Hide the "Deaths" column on mobile to save space */
+            .hide-mobile { display: none !important; }
+            
+            /* Remove hover effect on mobile */
+            tr:hover { background: rgba(255, 255, 255, 0.05); }
         }
     </style>
 </head>
@@ -202,7 +258,7 @@
         <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0;">
 
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search player name...">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search player...">
         </div>
 
         <div class="table-container">
@@ -239,7 +295,7 @@
                                     <%= (player.kills / (player.deaths > 0 ? player.deaths : 1)).toFixed(2) %>
                                 </td>
 
-                                <td><i class="fas fa-heart heart-icon"></i> <%= player.hearts %></td>
+                                <td><i class="fas fa-heart heart-icon hide-desktop"></i> <%= player.hearts %></td>
                             </tr>
                         <% }) %>
                     <% } %>
@@ -257,11 +313,12 @@
             let rows = document.querySelectorAll('#statsTable tbody tr');
 
             rows.forEach(row => {
-                let nameCell = row.cells[1]; 
+                let nameCell = row.querySelector('.player-link strong');
                 if (nameCell) {
                     let text = nameCell.textContent || nameCell.innerText;
                     if (text.toLowerCase().indexOf(filter) > -1) {
-                        row.style.display = "";
+                        row.style.display = "flex"; /* Important: keep flex for card view */
+                        if (window.innerWidth > 768) row.style.display = "table-row"; /* Reset for desktop */
                     } else {
                         row.style.display = "none";
                     }
@@ -272,4 +329,3 @@
 
 </body>
 </html>
-
